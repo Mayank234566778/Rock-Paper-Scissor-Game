@@ -1,0 +1,93 @@
+import random
+import os
+import time
+
+def clear_screen():
+    """Clears terminal output."""
+    os.system("cls" if os.name == "nt" else "clear")
+
+def show_header():
+    """Displays the game title."""
+    print("=" * 50)
+    print("         ROCK  •  PAPER  •  SCISSORS")
+    print("=" * 50)
+
+def decide_winner(player, system):
+    """Decides winner of a round."""
+    if player == system:
+        return "draw"
+
+    winning_map = {
+        "rock": "scissors",
+        "scissors": "paper",
+        "paper": "rock"
+    }
+
+    return "player" if winning_map[player] == system else "system"
+
+def play():
+    """Runs the complete game."""
+    valid_moves = ["rock", "paper", "scissors"]
+
+    clear_screen()
+    show_header()
+
+    while True:
+        try:
+            rounds = int(input("Enter number of rounds you want to play: "))
+            if rounds > 0:
+                break
+        except ValueError:
+            pass
+        print("Invalid input! Please enter a positive number.\n")
+
+    p_score = 0
+    s_score = 0
+
+    for round_no in range(1, rounds + 1):
+        clear_screen()
+        show_header()
+        print(f"Round {round_no}/{rounds}")
+        print(f"Score → You: {p_score}  |  Computer: {s_score}\n")
+
+        move = input("Pick (rock/paper/scissors): ").lower()
+        while move not in valid_moves:
+            print("Invalid choice! Try again.")
+            move = input("Pick (rock/paper/scissors): ").lower()
+
+        system_move = random.choice(valid_moves)
+        print(f"\nComputer chooses: {system_move}")
+        time.sleep(1)
+
+        result = decide_winner(move, system_move)
+
+        if result == "player":
+            print("✔ You win this round!")
+            p_score += 1
+        elif result == "system":
+            print("✘ Computer wins this round!")
+            s_score += 1
+        else:
+            print("➖ Round is a draw!")
+
+        time.sleep(1.5)
+
+    # Final Result
+    clear_screen()
+    show_header()
+    print("FINAL SCOREBOARD\n")
+    print(f"You: {p_score}")
+    print(f"Computer: {s_score}\n")
+
+    if p_score > s_score:
+        print("🏆 You Win the Game!")
+    elif p_score < s_score:
+        print("💀 Computer Wins the Game!")
+    else:
+        print("🤝 It's a Tie Game!")
+
+    print("\nThanks for playing!")
+
+
+if __name__ == "__main__":
+    play()
